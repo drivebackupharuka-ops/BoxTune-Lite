@@ -1,33 +1,29 @@
-# How to publish BoxTune Lite to GitHub
+# BoxTune Lite publishing guide
 
-Owner: `drivebackupharuka-ops` (connected account). Repository name: `BoxTune-Lite`.
+Repository: https://github.com/drivebackupharuka-ops/BoxTune-Lite
 
-## Publish the existing repository
+## Downloading
 
-The public empty GitHub repository `drivebackupharuka-ops/BoxTune-Lite` exists. The ChatGPT GitHub connector returned HTTP 403 `Resource not accessible by integration` on attempting to write README.md, and reported zero authorized installations. Grant the GitHub App access to the repository in GitHub **Settings → Applications → Installed GitHub Apps** (if available) or reconnect GitHub in ChatGPT **Settings → Plugins**, selecting `BoxTune-Lite` among permitted repositories. Once authorized, ChatGPT can publish the files.
+The current signed APK is available from [GitHub Releases](https://github.com/drivebackupharuka-ops/BoxTune-Lite/releases/latest). Open **Assets** and download the `.apk` file. SHA-256 checksum assets are published alongside APKs.
 
-To publish manually, extract the ZIP and, from the `BoxTune-Lite/` folder with Git installed, run:
+## Publishing a new APK version
 
-```sh
-git init
-git branch -M main
-git add .
-git commit -m "Initial BoxTune Lite 2.3, plugin catalog, 10 plugins"
-git remote add origin https://github.com/drivebackupharuka-ops/BoxTune-Lite.git
-git push -u origin main
-```
+1. Update the Android source and the application version in `app/build.gradle`. Build and test on a supported device.
+2. **Sign the release APK with the same private signing key as the previously distributed version.** Android will reject an in-place update with a different certificate. Keep private keystores and passwords out of this public repository.
+3. Commit the signed APK at `dist/BoxTuneLite-X.Y-android8.apk` on the `main` branch, using a higher numeric version such as 2.4.
+4. The `Publish BoxTune APK Release` workflow in `.github/workflows/release.yml` will run automatically when that file is added or changed. It scans `dist/`, selects the highest versioned APK, and publishes it as tag `vX.Y` with a corresponding SHA-256 checksum.
+5. Check [Actions](https://github.com/drivebackupharuka-ops/BoxTune-Lite/actions/workflows/release.yml) for a successful run, then verify both files appear under [Releases](https://github.com/drivebackupharuka-ops/BoxTune-Lite/releases).
 
-Never commit passwords, Android signing keystores, private keys or personal tokens.
+You can rerun the workflow via **Actions → Publish BoxTune APK Release → Run workflow**. If the release already exists, it refreshes the APK, checksum, and release notes.
 
-## What automatically updates?
+**Important:** This workflow *publishes* the signed APK already stored in `dist/`. It does not build or securely sign an APK itself. The separate `.github/workflows/android.yml` is a development build and produces a debug-signed APK that is not interchangeable with the existing signing certificate.
 
-- Adding/updating any plugin manifest in `plugins/system/` or `plugins/app/` triggers the GitHub `Update plugin catalog` workflow, which rebuilds `plugins/index.json` on `main`.
-- The BoxTune 2.3 APK checks the public GitHub catalog at launch and has a `REFRESH GITHUB PLUGINS` button. The list changes without an APK update.
-- The app downloads JSON plugins only after a tap, previews them and asks for installation approval. Auto-installing unreviewed community plugins is intentionally unsupported.
-- GitHub Actions also offers a debug APK build for application code changes. Debug builds are not signed with the private release key and cannot seamlessly upgrade the included release APK. Plugin-only changes do not rebuild the APK.
+If publishing fails with 403 `Resource not accessible by integration`, check repository **Settings → Actions → General → Workflow permissions** for the ability to write repository contents. The workflow requests `contents: write`. Repository or organization policies may still override this.
 
-## Permissions and limitations
+## Plugin updates
 
-Your repository must be **public** for anonymous RAW HTTPS access. The app does not use a GitHub token or require anyone to log in. If the GitHub Actions workflow can't push its index update, go to repository Settings → Actions → General → Workflow permissions and allow GitHub Actions to write repository contents, or regenerate the catalog locally and commit it manually. This is a repository setting, not Android administrator/root access.
+Plugin manifests live under `plugins/system/` and `plugins/app/`. The `Update plugin catalog` workflow automatically rebuilds `plugins/index.json` when manifests change. BoxTune 2.3 fetches the public raw catalog when opened or refreshed. Downloads and installations require user approval, and the JSON plugins cannot execute arbitrary code. Plugin-only changes do not require a new Android APK release.
 
-No APK has been run on physical TV hardware in this environment. The included v2.3 APK passed package/signature and structural bytecode checks, which cannot guarantee that custom Android TV firmware will run it successfully.
+## Safety
+
+No app version has been physically tested on the user's specific TV box here. The APK was signed and statically checked offline. Never publish Android signing keys, GitHub tokens, or passwords, and never promise CPU overclocking, zero input lag, or automatic Android root privileges.
