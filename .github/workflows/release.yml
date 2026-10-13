@@ -1,0 +1,88 @@
+name: Publish BoxTune APK Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dist/BoxTuneLite-*-android8.apk'
+      - '.github/workflows/release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish latest versioned APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Identify latest versioned APK
+        id: apk
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t apks < <(find dist -maxdepth 1 -type f -regextype posix-extended \
+            -regex 'dist/BoxTuneLite-[0-9]+\.[0-9]+(\.[0-9]+)?-android8\.apk' | sort -V)
+          if (( ${#apks[@]} == 0 )); then
+            echo "No versioned Android APK was found in dist/" >&2
+            exit 1
+          fi
+          apk="${apks[${#apks[@]}-1]}"
+          name="${apk##*/}"
+          version="${name#BoxTuneLite-}"
+          version="${version%-android8.apk}"
+          echo "file=$apk" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          echo "Publishing $apk as v$version"
+
+      - name: Create SHA-256 checksum
+        shell: bash
+        env:
+          RELEASE_FILE: ${{ steps.apk.outputs.file }}
+          RELEASE_TAG: ${{ steps.apk.outputs.tag }}
+        run: |
+          sha256sum "$RELEASE_FILE" > "dist/BoxTuneLite-${RELEASE_TAG}-SHA256.txt"
+
+      - name: Prepare release notes
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ steps.apk.outputs.version }}
+        run: |
+          cat > "$RUNNER_TEMP/release-notes.md" <<EOF
+          ## BoxTune Lite v${RELEASE_VERSION}
+
+          Android 8+ TV-box utility. The APK is in **Assets** below; choose the `.apk` file to download.
+
+          - Hardware, RAM, storage and input diagnostics
+          - TV/keyboard/mouse interface options and settings shortcuts
+          - App review and maintenance features
+          - GitHub System/App JSON plugin catalog (plugin installs require your approval)
+
+          **Important:** This APK was signed and checked offline, but was not tested on the user's physical TV box. It is not a guaranteed FPS booster, and plugin catalog updates do not silently install software.
+
+          This release contains the existing signed APK from `dist/`, **not** the independently signed debug APK produced by CI.
+          EOF
+
+      - name: Publish or update GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_FILE: ${{ steps.apk.outputs.file }}
+          RELEASE_TAG: ${{ steps.apk.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.apk.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          checksum="dist/BoxTuneLite-${RELEASE_TAG}-SHA256.txt"
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$RELEASE_FILE" "$checksum" --clobber
+          else
+            gh release create "$RELEASE_TAG" "$RELEASE_FILE" "$checksum" \
+              --title "BoxTune Lite v${RELEASE_VERSION}" \
+              --notes-file "$RUNNER_TEMP/release-notes.md" \
+              --target "$GITHUB_SHA" \
+              --latest
+          fi
