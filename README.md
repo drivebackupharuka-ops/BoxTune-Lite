@@ -2,6 +2,17 @@
 
 Lightweight Android 8+ (API 26+) TV-box utility for diagnostics, simple display/mouse settings and permission-first maintenance. **No root or performance guarantees.**
 
+## Download latest APK
+
+**[Download BoxTune Lite APK from GitHub Releases](https://github.com/drivebackupharuka-ops/BoxTune-Lite/releases/latest)**
+
+The latest Release page has a signed APK under **Assets**, alongside a SHA-256 checksum. See [all releases](https://github.com/drivebackupharuka-ops/BoxTune-Lite/releases).
+
+- Version 2.3 is currently published as [v2.3](https://github.com/drivebackupharuka-ops/BoxTune-Lite/releases/tag/v2.3).
+- When a new versioned signed APK named `dist/BoxTuneLite-X.Y-android8.apk` is committed to `main`, [the release workflow](.github/workflows/release.yml) publishes a GitHub Release automatically.
+- You can also start **Publish BoxTune APK Release** manually from the Actions tab.
+- Debug APKs from CI use a different signing certificate. Publish a correctly signed release APK in `dist/` for in-place upgrades.
+
 ## GitHub plugins
 
 `plugins/index.json` is a schema-v1 catalog of JSON-only plugin manifests in `plugins/system/` and `plugins/app/`. The Android app checks the catalog when launched, also offering a manual refresh and a last-known-good cached listing. It then downloads selected manifests from:
