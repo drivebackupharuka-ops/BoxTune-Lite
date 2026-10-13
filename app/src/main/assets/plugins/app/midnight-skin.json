@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "midnight-skin",
+  "name": "Midnight Skin",
+  "category": "App",
+  "action": "dark",
+  "description": "Toggles BoxTune dark and light theme.",
+  "version": 1
+}

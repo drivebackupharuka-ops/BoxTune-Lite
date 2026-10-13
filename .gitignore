@@ -1,0 +1,14 @@
+# Android and IDE generated files
+.gradle/
+.idea/
+/local.properties
+/build/
+/app/build/
+*.iml
+*.jks
+*.keystore
+*.pem
+*.p12
+*.key
+*.log
+.DS_Store

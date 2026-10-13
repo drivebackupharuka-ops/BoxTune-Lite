@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "plugins": [
+    {
+      "schema": 1,
+      "id": "connection-check",
+      "name": "Connection Check",
+      "description": "Opens network settings to prioritize stable Ethernet or Wi-Fi.",
+      "category": "System",
+      "action": "network",
+      "version": 1,
+      "path": "system/connection-check.json"
+    },
+    {
+      "schema": 1,
+      "id": "display-tune",
+      "name": "Display Tuner",
+      "description": "Opens display settings to try 720p and game mode if available.",
+      "category": "System",
+      "action": "display",
+      "version": 1,
+      "path": "system/display-tune.json"
+    },
+    {
+      "schema": 1,
+      "id": "pointer-tune",
+      "name": "Pointer Tuner",
+      "description": "Opens optional mouse pointer-speed controls; no FPS claims.",
+      "category": "System",
+      "action": "mouse",
+      "version": 1,
+      "path": "system/pointer-tune.json"
+    },
+    {
+      "schema": 1,
+      "id": "startup-audit",
+      "name": "Startup Audit",
+      "description": "Opens Android app settings to review and disable unnecessary apps.",
+      "category": "System",
+      "action": "apps",
+      "version": 1,
+      "path": "system/startup-audit.json"
+    },
+    {
+      "schema": 1,
+      "id": "storage-sweep",
+      "name": "Storage Sweep",
+      "description": "Opens Android storage settings for user-reviewed cleanup.",
+      "category": "System",
+      "action": "storage",
+      "version": 1,
+      "path": "system/storage-sweep.json"
+    },
+    {
+      "schema": 1,
+      "id": "app-review",
+      "name": "App Review",
+      "description": "Opens unused app review panel; needs separate Usage Access.",
+      "category": "App",
+      "action": "scanner",
+      "version": 1,
+      "path": "app/app-review.json"
+    },
+    {
+      "schema": 1,
+      "id": "compact-workspace",
+      "name": "Compact Workspace",
+      "description": "Toggles BoxTune compact keyboard/mouse layout.",
+      "category": "App",
+      "action": "compact",
+      "version": 1,
+      "path": "app/compact-workspace.json"
+    },
+    {
+      "schema": 1,
+      "id": "health-dashboard",
+      "name": "Health Dashboard",
+      "description": "Refreshes RAM, storage, hardware and network diagnostics.",
+      "category": "App",
+      "action": "diagnostics",
+      "version": 1,
+      "path": "app/health-dashboard.json"
+    },
+    {
+      "schema": 1,
+      "id": "midnight-skin",
+      "name": "Midnight Skin",
+      "description": "Toggles BoxTune dark and light theme.",
+      "category": "App",
+      "action": "dark",
+      "version": 1,
+      "path": "app/midnight-skin.json"
+    },
+    {
+      "schema": 1,
+      "id": "roblox-hub",
+      "name": "Roblox Hub",
+      "description": "Opens Roblox if it is installed on this TV box.",
+      "category": "App",
+      "action": "roblox",
+      "version": 1,
+      "path": "app/roblox-hub.json"
+    }
+  ]
+}

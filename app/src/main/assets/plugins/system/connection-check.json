@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "connection-check",
+  "name": "Connection Check",
+  "category": "System",
+  "action": "network",
+  "description": "Opens network settings to prioritize stable Ethernet or Wi-Fi.",
+  "version": 1
+}

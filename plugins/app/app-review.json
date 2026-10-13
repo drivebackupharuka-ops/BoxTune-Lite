@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "app-review",
+  "name": "App Review",
+  "category": "App",
+  "action": "scanner",
+  "description": "Opens unused app review panel; needs separate Usage Access.",
+  "version": 1
+}

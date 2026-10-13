@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "storage-sweep",
+  "name": "Storage Sweep",
+  "category": "System",
+  "action": "storage",
+  "description": "Opens Android storage settings for user-reviewed cleanup.",
+  "version": 1
+}

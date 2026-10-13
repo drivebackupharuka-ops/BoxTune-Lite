@@ -1,0 +1,13 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.boxtune.lite'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.boxtune.lite'
+        minSdk 26
+        targetSdk 28
+        versionCode 5
+        versionName '2.3'
+    }
+}

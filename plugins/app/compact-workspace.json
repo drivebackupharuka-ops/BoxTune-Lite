@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "compact-workspace",
+  "name": "Compact Workspace",
+  "category": "App",
+  "action": "compact",
+  "description": "Toggles BoxTune compact keyboard/mouse layout.",
+  "version": 1
+}

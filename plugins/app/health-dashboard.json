@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "health-dashboard",
+  "name": "Health Dashboard",
+  "category": "App",
+  "action": "diagnostics",
+  "description": "Refreshes RAM, storage, hardware and network diagnostics.",
+  "version": 1
+}

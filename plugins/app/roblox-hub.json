@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "roblox-hub",
+  "name": "Roblox Hub",
+  "category": "App",
+  "action": "roblox",
+  "description": "Opens Roblox if it is installed on this TV box.",
+  "version": 1
+}

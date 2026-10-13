@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "startup-audit",
+  "name": "Startup Audit",
+  "category": "System",
+  "action": "apps",
+  "description": "Opens Android app settings to review and disable unnecessary apps.",
+  "version": 1
+}

@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "display-tune",
+  "name": "Display Tuner",
+  "category": "System",
+  "action": "display",
+  "description": "Opens display settings to try 720p and game mode if available.",
+  "version": 1
+}

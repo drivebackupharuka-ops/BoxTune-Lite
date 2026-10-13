@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "pointer-tune",
+  "name": "Pointer Tuner",
+  "category": "System",
+  "action": "mouse",
+  "description": "Opens optional mouse pointer-speed controls; no FPS claims.",
+  "version": 1
+}
