@@ -1,0 +1,165 @@
+BOXTUNE LITE - HOW TO CREATE YOUR OWN PLUGINS
+================================================
+Beginner guide for BoxTune Lite 2.3 (Android 8+)
+Official community repository:
+https://github.com/drivebackupharuka-ops/BoxTune-Lite
+
+1. WHAT IS A BOXTUNE PLUGIN?
+---------------------------
+A BoxTune plugin is a small plain-text JSON file (.json). It describes a
+button in BoxTune that runs ONE action already supported by the app.
+
+There are two categories:
+- SYSTEM: opens a supported Android settings/maintenance screen.
+- APP: changes a BoxTune preference or opens a built-in BoxTune feature.
+
+Plugins are not executable scripts. They cannot run arbitrary Java, Python,
+JavaScript, shell commands, APKs, root commands, or custom optimizations.
+If you need a genuinely new capability, it must be implemented in the
+trusted Android application source and distributed in a new APK release.
+
+2. CHOOSE AN EXISTING ACTION
+----------------------------
+SYSTEM category (write "System" exactly):
+  storage  - open Android storage settings
+  apps     - open Android application management
+  display  - open Android display settings
+  network  - open Android network/connection settings
+  mouse    - open the supported pointer settings/permission controls
+
+APP category (write "App" exactly):
+  dark        - switch BoxTune between dark/light appearance
+  compact     - switch BoxTune's compact keyboard/mouse layout
+  diagnostics - refresh BoxTune device and network diagnostics
+  scanner     - open the unused-app review tool (Usage Access is separate)
+  roblox      - launch Roblox, if installed on the TV box
+
+You cannot invent new action names such as "overclock", "kill_all_apps"
+or "zero_ping": BoxTune 2.3 will not execute them.
+
+3. CREATE A PLUGIN FILE
+-----------------------
+Use Notepad, VS Code, another plain-text editor, or GitHub's browser editor.
+Create a UTF-8 text file with a .json extension, not .txt or .json.txt.
+
+EXAMPLE A - SYSTEM PLUGIN
+Filename: plugins/system/my-display-helper.json
+
+{
+  "schema": 1,
+  "id": "my-display-helper",
+  "name": "My Display Helper",
+  "description": "Open Android display settings to review resolution.",
+  "category": "System",
+  "action": "display",
+  "version": 1
+}
+
+EXAMPLE B - APP PLUGIN
+Filename: plugins/app/my-dark-toggle.json
+
+{
+  "schema": 1,
+  "id": "my-dark-toggle",
+  "name": "My Dark Toggle",
+  "description": "Switch the BoxTune interface between dark and light.",
+  "category": "App",
+  "action": "dark",
+  "version": 1
+}
+
+Rules for the fields:
+- schema: must be the number 1.
+- id: unique identifier, 1-40 characters; lowercase a-z, digits 0-9,
+      underscore (_), hyphen (-) or dot (.) only.
+- name: display name, 1-64 characters.
+- description: short explanation, up to 160 characters.
+- category: EXACTLY "System" or "App" (case-sensitive).
+- action: choose ONE action listed in Section 2 for that category.
+- version: whole number from 1 to 100000, increasing for each update.
+- Plugin file: at most 12 KiB. Use the same id for the filename stem.
+
+JSON basics:
+- Use double quotes (") around text, not single quotes.
+- No comments or trailing commas inside JSON.
+- schema and version are numbers, not quoted strings.
+- Save as UTF-8. Do not embed tokens, passwords, or private information.
+
+4. TEST YOUR PLUGIN LOCALLY
+---------------------------
+1) Save your JSON plugin file on your computer or phone.
+2) Copy it to your Android TV box, e.g. Downloads or a USB drive.
+3) Open BoxTune -> IMPORT .JSON COMMUNITY PLUGIN.
+4) Choose the file using Android's file picker.
+5) Check the name, category and action in BoxTune's review screen.
+6) Tap APPROVE AND INSTALL, then run the plugin button to test it.
+7) If it doesn't appear, check your JSON syntax and the action list.
+
+Android permissions may require separate user approval. Settings menus
+vary across TV-box firmware. If the file picker is missing, install a
+compatible file manager; plugin import may still be unavailable on some
+devices.
+
+5. SHARE YOUR PLUGIN THROUGH GITHUB
+-----------------------------------
+To contribute to the online BoxTune community catalog:
+1) Visit https://github.com/drivebackupharuka-ops/BoxTune-Lite
+2) If you own the repository, use Add file -> Create new file (or upload);
+   otherwise, fork the repository and propose a pull request.
+3) Put your file at:
+      plugins/system/YOUR-ID.json    for a System plugin
+      plugins/app/YOUR-ID.json       for an App plugin
+4) Paste valid JSON as shown above and commit your change.
+5) For contributors working in a fork, open a Pull Request describing
+   what the action does. The repository owner reviews and merges it.
+6) On main, the GitHub Actions "Update plugin catalog" workflow should
+   regenerate plugins/index.json from the accepted JSON files.
+   It can also be generated locally with:
+      python scripts/generate_catalog.py
+7) Verify your entry appears under plugins/index.json on the main branch.
+8) On your TV box, reopen BoxTune or tap REFRESH GITHUB PLUGINS.
+   The plugin should appear once GitHub's raw-file cache refreshes.
+9) Review and approve the plugin download/installation in BoxTune.
+   Online plugins are NEVER installed silently.
+
+Note: The generator allows up to 20 total catalog plugins (10 shipped
+as examples). A new entry may be rejected if the catalog is full.
+There may also be a separate limit of 20 imported community plugins.
+
+6. UPDATE AN EXISTING PLUGIN
+----------------------------
+Keep the plugin's id, category and action unchanged. Increase version
+(for example 1 -> 2), edit its name/description if needed, and commit.
+Once the catalog updates, BoxTune can offer the newer manifest for
+manual review and installation. Changing the action or category under
+an existing id is not a supported update path.
+
+7. COMMON ERRORS
+----------------
+"Invalid JSON"          -> check quotes, commas, and closing braces.
+"Unknown action"        -> choose an action from Section 2.
+"Category mismatch"     -> System and App are case-sensitive.
+"Invalid plugin ID"     -> use lowercase letters/numbers/._- only.
+"Duplicate plugin ID"   -> pick an ID not used in plugins/index.json.
+"Catalog stale"         -> regenerate plugins/index.json or check CI.
+"Can't download"        -> check internet, GitHub URL and repository
+                           visibility (the online catalog is public).
+"Does not optimize FPS" -> most plugins open settings or app functions;
+                           none bypass Android hardware limitations.
+
+8. SECURITY / LIMITATIONS
+-------------------------
+Only import plugins from people you trust, and review the JSON contents.
+BoxTune's JSON plugins cannot gain root or administrator privileges or
+uninstall apps without Android approval. The built-in action controls
+what actually happens; the text "name" alone does not change behavior.
+
+Do not put random APKs, scripts or commands into the plugins folder
+expecting them to work. Real new app functionality needs code changes,
+a new build and proper Android signing.
+
+For detailed format rules see PLUGINS.md.
+For catalog generation see scripts/generate_catalog.py.
+For help and improvement ideas, open a GitHub Issue or Pull Request.
+
+Happy building!
