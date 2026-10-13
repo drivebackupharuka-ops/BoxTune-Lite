@@ -13,6 +13,10 @@ The latest Release page has a signed APK under **Assets**, alongside a SHA-256 c
 - You can also start **Publish BoxTune APK Release** manually from the Actions tab.
 - Debug APKs from CI use a different signing certificate. Publish a correctly signed release APK in `dist/` for in-place upgrades.
 
+## Create your own community plugins
+
+**[Beginner tutorial: HOW_TO_CREATE_PLUGINS.txt](HOW_TO_CREATE_PLUGINS.txt)** — step-by-step guide for writing JSON plugins, testing them on Android TV, and submitting them to the System or App plugin catalog.
+
 ## GitHub plugins
 
 `plugins/index.json` is a schema-v1 catalog of JSON-only plugin manifests in `plugins/system/` and `plugins/app/`. The Android app checks the catalog when launched, also offering a manual refresh and a last-known-good cached listing. It then downloads selected manifests from:
