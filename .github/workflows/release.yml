@@ -52,8 +52,8 @@ jobs:
         env:
           RELEASE_VERSION: ${{ steps.apk.outputs.version }}
         run: |
-          cat > "$RUNNER_TEMP/release-notes.md" <<EOF
-          ## BoxTune Lite v${RELEASE_VERSION}
+          cat > "$RUNNER_TEMP/release-notes.md" <<'EOF'
+          ## BoxTune Lite v__VERSION__
 
           Android 8+ TV-box utility. The APK is in **Assets** below; choose the `.apk` file to download.
 
@@ -66,6 +66,7 @@ jobs:
 
           This release contains the existing signed APK from `dist/`, **not** the independently signed debug APK produced by CI.
           EOF
+          sed -i "s/__VERSION__/${RELEASE_VERSION}/g" "$RUNNER_TEMP/release-notes.md"
 
       - name: Publish or update GitHub Release
         env:
@@ -78,6 +79,7 @@ jobs:
           set -euo pipefail
           checksum="dist/BoxTuneLite-${RELEASE_TAG}-SHA256.txt"
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release edit "$RELEASE_TAG" --notes-file "$RUNNER_TEMP/release-notes.md"
             gh release upload "$RELEASE_TAG" "$RELEASE_FILE" "$checksum" --clobber
           else
             gh release create "$RELEASE_TAG" "$RELEASE_FILE" "$checksum" \
